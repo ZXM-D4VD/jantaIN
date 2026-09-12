@@ -1,346 +1,365 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JanSeva Portal - Citizen & Welfare Services</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0f172a">
-  
+  <title>JanSeva - Public Welfare & Assistance Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-
-  <style>
-    :root {
-      --primary: #0f172a;
-      --accent: #2563eb;
-      --accent-hover: #1d4ed8;
-      --bg: #f8fafc;
-      --card-bg: #ffffff;
-      --text: #0f172a;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
-      --shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
-      --radius: 16px;
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { saffron: { 500: '#ff9933', 600: '#ea580c' }, navy: { 800: '#031b33', 900: '#000080' } },
+          fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+        }
+      }
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-    body { background-color: var(--bg); color: var(--text); line-height: 1.6; }
-    
-    header {
-      background: rgba(15, 23, 42, 0.95);
-      backdrop-filter: blur(10px);
-      color: white;
-      padding: 1.2rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-    .logo { font-size: 1.4rem; font-weight: 800; display: flex; align-items: center; gap: 0.6rem; color: #60a5fa; }
-    nav { display: flex; gap: 1.2rem; align-items: center; }
-    nav a { color: #cbd5e1; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.2s; }
-    nav a:hover { color: #60a5fa; }
-    .btn-nav { background: var(--accent); color: white !important; padding: 0.5rem 1rem; border-radius: 8px; }
-
-    .hero {
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      color: white;
-      padding: 4.5rem 1.5rem 6rem;
-      text-align: center;
-    }
-    .hero h1 { font-size: 2.6rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.02em; }
-    .hero p { max-width: 650px; margin: 0 auto 2rem; color: #94a3b8; font-size: 1.05rem; }
-
-    .container { max-width: 1200px; margin: -3rem auto 4rem; padding: 0 1.5rem; position: relative; z-index: 10; }
-
-    .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-bottom: 4rem; }
-    
-    .card {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      padding: 1.8rem;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
-    .card-icon { width: 50px; height: 50px; border-radius: 12px; background: #eff6ff; color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 1.2rem; }
-    .card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .card p { color: var(--text-muted); font-size: 0.9rem; }
-
-    /* Video Slide Animation Section */
-    .video-slider-section { margin: 4rem 0; background: white; padding: 2rem; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); }
-    .slider-wrapper { position: relative; overflow: hidden; border-radius: 12px; background: #000; height: 400px; }
-    .slide-track { display: flex; width: 300%; height: 100%; transition: transform 0.5s ease-in-out; }
-    .slide { width: 33.333%; height: 100%; position: relative; flex-shrink: 0; }
-    video { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .slider-controls { display: flex; justify-content: center; gap: 0.5rem; margin-top: 1rem; }
-    .dot { width: 12px; height: 12px; background: #cbd5e1; border-radius: 50%; cursor: pointer; transition: 0.2s; }
-    .dot.active { background: var(--accent); width: 28px; border-radius: 10px; }
-
-    /* FAQ Section */
-    .faq-section { margin: 4rem 0; }
-    .faq-item { background: white; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 0.8rem; overflow: hidden; }
-    .faq-question { padding: 1.2rem; font-weight: 700; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fff; }
-    .faq-answer { padding: 0 1.2rem 1.2rem; color: var(--text-muted); font-size: 0.95rem; display: none; }
-    .faq-item.active .faq-answer { display: block; }
-
-    .form-container { background: white; padding: 2.5rem; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); max-width: 700px; margin: 0 auto; }
-    .form-group { margin-bottom: 1.2rem; }
-    .form-group label { display: block; font-weight: 600; margin-bottom: 0.4rem; font-size: 0.9rem; }
-    input, select, textarea { width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 1rem; outline: none; }
-    input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
-    
-    button { background: var(--accent); color: white; border: none; padding: 0.9rem 1.8rem; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; width: 100%; transition: 0.2s; }
-    button:hover { background: var(--accent-hover); }
-
-    .progress-bar { background: #e2e8f0; border-radius: 20px; height: 10px; overflow: hidden; margin: 1rem 0 0.5rem; }
-    .progress-fill { background: var(--accent); height: 100%; width: 0%; transition: width 0.4s; }
-
-    footer { background: var(--primary); color: #94a3b8; text-align: center; padding: 2.5rem 1rem; margin-top: 5rem; }
-    @media (max-width: 768px) { nav { display: none; } }
-  </style>
+  </script>
 </head>
-<body>
+<body class="bg-slate-50 font-sans text-slate-800 flex flex-col min-h-screen">
 
-  <header>
-    <div class="logo"><i class="fa-solid fa-hands-holding-child"></i> JanSeva Portal</div>
-    <nav>
-      <a href="#mcd-work">MCD Work</a>
-      <a href="#society-welfare">Society Welfare</a>
-      <a href="#education-aid">Education Aid</a>
-      <a href="#disaster-relief">Disaster Relief</a>
-      <a href="#campaigns">Campaigns</a>
-      <a href="#faqs">FAQs</a>
-      <a href="admin.html" class="btn-nav">Admin Login</a>
-    </nav>
+  <!-- HEADER NAVBAR -->
+  <header class="bg-navy-900 text-white sticky top-0 z-40 shadow-xl border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-saffron-500 flex items-center justify-center font-black text-white text-xl shadow-lg">JS</div>
+        <div>
+          <h1 class="font-extrabold text-base tracking-tight leading-none">JanSeva Portal</h1>
+          <p class="text-[11px] text-slate-300">Public Relief & Citizen Welfare</p>
+        </div>
+      </a>
+
+      <!-- Dynamic Navigation Menu -->
+      <nav class="hidden lg:flex items-center gap-5 text-xs font-bold text-slate-200">
+        <a href="#causes" class="hover:text-saffron-500 transition">Active Causes</a>
+        <a href="#track" class="hover:text-saffron-500 transition">Track Request</a>
+        <button onclick="openMenuModal('mcd')" class="hover:text-saffron-500 transition">MCD Work</button>
+        <button onclick="openMenuModal('society')" class="hover:text-saffron-500 transition">Welfare for Society</button>
+        <button onclick="openMenuModal('legal')" class="hover:text-saffron-500 transition text-emerald-400">Legal Aid Portal</button>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <button onclick="openMenuModal('child')" class="flex items-center gap-1.5 bg-red-600/20 text-red-400 border border-red-500/30 text-xs px-3 py-2 rounded-xl font-bold hover:bg-red-600/30 transition">
+          <i class="fa-solid fa-phone-volume"></i> Helpline (1098)
+        </button>
+        <div id="auth-btn-container">
+          <button onclick="openAuthModal('login')" class="bg-saffron-500 hover:bg-saffron-600 text-white text-xs px-3.5 py-2 rounded-xl font-extrabold shadow-md transition">
+            Login / Sign Up
+          </button>
+        </div>
+        <button onclick="openAdminModal()" class="text-slate-400 hover:text-saffron-500 p-2 text-sm" title="Admin Portal (Pin: 9090)">
+          <i class="fa-solid fa-user-shield"></i>
+        </button>
+      </div>
+    </div>
   </header>
 
-  <section class="hero">
-    <h1>Public Welfare & Civic Governance</h1>
-    <p>Submit service requests, register complaints, and track community welfare programs in real-time.</p>
-  </section>
+  <!-- MAIN BODY -->
+  <main class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex-1 space-y-8">
 
-  <div class="container">
-    
-    <!-- 4 Expanded Service Menus -->
-    <div class="grid-cards">
-      <div class="card" id="mcd-work">
-        <div class="card-icon"><i class="fa-solid fa-city"></i></div>
-        <h3>MCD Sanitation & Infrastructure</h3>
-        <p>Road repairs, streetlight installation, garbage management, and local sanitation drives.</p>
-      </div>
-
-      <div class="card" id="society-welfare">
-        <div class="card-icon"><i class="fa-solid fa-people-roof"></i></div>
-        <h3>Society Welfare & Housing Support</h3>
-        <p>Residential security, elderly support, community park upkeep, and local welfare desks.</p>
-      </div>
-
-      <div class="card" id="education-aid">
-        <div class="card-icon"><i class="fa-solid fa-graduation-cap"></i></div>
-        <h3>Education & Skill Development</h3>
-        <p>Scholarship assistance, free book distribution, and youth vocational training programs.</p>
-      </div>
-
-      <div class="card" id="disaster-relief">
-        <div class="card-icon"><i class="fa-solid fa-truck-droplet"></i></div>
-        <h3>Emergency & Disaster Relief</h3>
-        <p>Medical emergency support, disaster supply distribution, and fast blood donation response.</p>
-      </div>
-    </div>
-
-    <!-- Animated Local Video Slider (Downloaded Videos Fix) -->
-    <div class="video-slider-section">
-      <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;"><i class="fa-solid fa-play-circle" style="color:var(--accent);"></i> Video Awareness Showcase</h2>
-      <p style="color:var(--text-muted); margin-bottom: 1rem;">Slide through uploaded guidance and operational videos.</p>
+    <!-- HERO GRID -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
       
-      <div class="slider-wrapper">
-        <div class="slide-track" id="slideTrack">
-          <div class="slide">
-            <video controls poster="https://images.unsplash.com/photo-1532629345422-7515f3d16bb0?w=1200">
-              <source src="assets/video1.mp4" type="video/mp4">
-            </video>
+      <!-- HERO & CAUSES -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="bg-gradient-to-r from-navy-900 via-navy-800 to-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-2xl relative overflow-hidden border border-slate-800">
+          <span class="bg-saffron-500 text-white text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Official Portal 2026</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold mt-3 tracking-tight">Direct Citizen Welfare & Relief Operations</h2>
+          <p class="text-xs sm:text-sm text-slate-300 mt-2 leading-relaxed">Fast emergency response, ration drives, medical relief, legal awareness, and child protection services.</p>
+          <div class="mt-4 flex gap-3">
+            <a href="tel:1800112233" class="bg-saffron-500 hover:bg-saffron-600 text-white text-xs font-extrabold px-4 py-2.5 rounded-xl shadow-lg transition">Toll Free: 1800-11-2233</a>
           </div>
-          <div class="slide">
-            <video controls poster="https://images.unsplash.com/photo-1593113598332-cd288d649433?w=1200">
-              <source src="assets/video2.mp4" type="video/mp4">
-            </video>
-          </div>
-          <div class="slide">
-            <video controls poster="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1200">
-              <source src="assets/video3.mp4" type="video/mp4">
-            </video>
+        </div>
+
+        <!-- ACTIVE CAUSES CARDS -->
+        <div id="causes" class="space-y-4">
+          <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+            <i class="fa-solid fa-heart-circle-check text-saffron-500"></i> Active Relief Causes
+          </h3>
+          <div id="user-campaigns-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Dynamic Render -->
           </div>
         </div>
       </div>
-      <div class="slider-controls">
-        <div class="dot active" onclick="goToSlide(0)"></div>
-        <div class="dot" onclick="goToSlide(1)"></div>
-        <div class="dot" onclick="goToSlide(2)"></div>
+
+      <!-- FORM SECTION -->
+      <div class="lg:col-span-5">
+        <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-xl space-y-4 sticky top-24">
+          <div class="border-b pb-3">
+            <span class="text-[10px] bg-saffron-500 text-white font-extrabold px-2.5 py-0.5 rounded-md">EMERGENCY ASSISTANCE</span>
+            <h3 class="font-extrabold text-base text-slate-900 mt-1">Submit Help Request</h3>
+          </div>
+
+          <form id="public-help-form" onsubmit="handleUserSubmit(event)" class="space-y-3 text-xs">
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Full Name *</label>
+              <input type="text" id="usr-name" required placeholder="Name" class="w-full px-3 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-saffron-500">
+            </div>
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Email *</label>
+              <input type="email" id="usr-email" required placeholder="email@example.com" class="w-full px-3 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-saffron-500">
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Phone *</label>
+                <input type="tel" id="usr-phone" required placeholder="Phone" class="w-full px-3 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-saffron-500">
+              </div>
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">City *</label>
+                <input type="text" id="usr-city" required placeholder="City" class="w-full px-3 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-saffron-500">
+              </div>
+            </div>
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Category *</label>
+              <select id="usr-category" required class="w-full px-3 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-saffron-500">
+                <option value="">Select Option</option>
+                <option value="Food & Ration Relief">Food & Ration Relief</option>
+                <option value="Emergency Medical Aid">Emergency Medical Aid</option>
+                <option value="MCD Road/Sanitation Issue">MCD Road/Sanitation Issue</option>
+                <option value="Legal Aid & Welfare">Legal Aid & Welfare</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Details *</label>
+              <textarea id="usr-details" rows="3" required placeholder="Describe issue..." class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-saffron-500"></textarea>
+            </div>
+            <button type="submit" class="w-full bg-saffron-500 hover:bg-saffron-600 text-white font-extrabold py-3 rounded-xl shadow-lg transition">
+              Submit & Dispatch Notification
+            </button>
+          </form>
+        </div>
       </div>
     </div>
 
-    <!-- Active Campaigns -->
-    <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 1.5rem;" id="campaigns">Active Welfare Campaigns</h2>
-    <div class="grid-cards" id="campaigns-container">
-      <!-- Loaded dynamically -->
+    <!-- TICKET TRACKER -->
+    <div id="track" class="bg-white border border-slate-200 rounded-3xl p-6 shadow-lg space-y-4">
+      <h3 class="font-extrabold text-base text-slate-900 flex items-center gap-2">
+        <i class="fa-solid fa-magnifying-glass text-saffron-500"></i> Emergency Request Ticket Tracker
+      </h3>
+      <div class="flex gap-2 max-w-md">
+        <input type="text" id="track-id-input" placeholder="Ticket ID (e.g. JS-1024)" class="flex-1 px-4 py-2 border rounded-xl text-xs font-bold uppercase focus:ring-2 focus:ring-saffron-500 outline-none">
+        <button onclick="trackRequestStatus()" class="bg-navy-900 text-white text-xs font-extrabold px-5 py-2 rounded-xl">Track</button>
+      </div>
+      <div id="track-result-box" class="hidden p-4 rounded-2xl border text-xs space-y-1"></div>
     </div>
 
-    <!-- Request Form -->
-    <div class="form-container" id="request-form-section">
-      <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.5rem;"><i class="fa-solid fa-paper-plane" style="color:var(--accent);"></i> Register Service Request</h2>
-      <p style="color:var(--text-muted); margin-bottom: 1.5rem;">Your data will be securely stored and confirmation sent via EmailJS.</p>
-      
-      <form id="help-form">
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" id="full_name" placeholder="John Doe" required>
-        </div>
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" id="email" placeholder="john@example.com" required>
-        </div>
-        <div class="form-group">
-          <label>Service Category</label>
-          <select id="category" required>
-            <option value="">-- Choose Option --</option>
-            <option value="MCD Services">MCD Works & Sanitation</option>
-            <option value="Society Welfare">Society Welfare & Housing</option>
-            <option value="Education Aid">Education & Scholarships</option>
-            <option value="Disaster Relief">Emergency & Disaster Relief</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>City / Ward Area</label>
-          <input type="text" id="city" placeholder="e.g. Ward 12, Delhi" required>
-        </div>
-        <div class="form-group">
-          <label>Issue Details</label>
-          <textarea id="details" rows="3" placeholder="Explain your request in detail..." required></textarea>
-        </div>
-        <button type="submit" id="submit-btn">Save Data & Submit Request</button>
-      </form>
-    </div>
-
-    <!-- FAQ Section -->
-    <div class="faq-section" id="faqs">
-      <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 1.5rem;"><i class="fa-solid fa-circle-question" style="color:var(--accent);"></i> Frequently Asked Questions</h2>
-      
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">How are MCD requests handled? <i class="fa-solid fa-chevron-down"></i></div>
-        <div class="faq-answer">Requests are logged into our database and forwarded to local ward officers for immediate field resolution.</div>
+    <!-- LOCAL HTML5 VIDEO SECTION (FIXED YOUTUBE EMBED ISSUE) -->
+    <div class="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 space-y-4 shadow-2xl">
+      <div>
+        <span class="bg-red-500/20 text-red-400 text-[10px] font-bold px-2.5 py-1 rounded-full border border-red-500/30">PUBLIC SAFETY DOCUMENTARY</span>
+        <h3 class="text-xl font-extrabold mt-2">Child Protection & Community Welfare Awareness</h3>
+        <p class="text-xs text-slate-400">Offline optimized HTML5 video player stream.</p>
       </div>
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">Will I get an email confirmation? <i class="fa-solid fa-chevron-down"></i></div>
-        <div class="faq-answer">Yes, as soon as you submit the form, EmailJS triggers a unique ticket ID to your registered email address.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">How can I track my request status? <i class="fa-solid fa-chevron-down"></i></div>
-        <div class="faq-answer">You can use your Ticket ID on the Admin Dashboard or contact local helpline representatives.</div>
+      <div class="aspect-video w-full rounded-2xl overflow-hidden border border-slate-700 bg-black">
+        <video class="w-full h-full object-cover" controls poster="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1200&q=80">
+          <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+          Your browser does not support HTML5 video tags.
+        </video>
       </div>
     </div>
 
+  </main>
+
+  <!-- DYNAMIC KNOWLEDGE MODAL -->
+  <div id="modal-menu-feature" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl relative">
+      <button onclick="closeMenuModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+      <div id="menu-feature-content"></div>
+    </div>
   </div>
 
-  <footer>
-    <p>&copy; 2026 JanSeva Portal. Built for Citizen Welfare & Community Support.</p>
+  <!-- AUTH MODAL -->
+  <div id="modal-auth" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl relative">
+      <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark"></i></button>
+      <div class="flex border-b">
+        <button id="tab-btn-login" onclick="switchAuthTab('login')" class="flex-1 py-2 font-bold text-xs border-b-2 border-saffron-500 text-saffron-600">Login</button>
+        <button id="tab-btn-signup" onclick="switchAuthTab('signup')" class="flex-1 py-2 font-bold text-xs border-b-2 border-transparent text-slate-400">Sign Up</button>
+      </div>
+      <form id="form-login" onsubmit="handleLoginSubmit(event)" class="space-y-3 text-xs">
+        <input type="email" id="login-email" required placeholder="Email" class="w-full p-2.5 border rounded-xl">
+        <input type="password" id="login-pass" required placeholder="Password" class="w-full p-2.5 border rounded-xl">
+        <button type="submit" class="w-full bg-navy-900 text-white font-bold py-2.5 rounded-xl">Login</button>
+      </form>
+      <form id="form-signup" onsubmit="handleSignupSubmit(event)" class="space-y-3 text-xs hidden">
+        <input type="text" id="signup-name" required placeholder="Full Name" class="w-full p-2.5 border rounded-xl">
+        <input type="email" id="signup-email" required placeholder="Email Address" class="w-full p-2.5 border rounded-xl">
+        <input type="password" id="signup-pass" minlength="6" required placeholder="Password" class="w-full p-2.5 border rounded-xl">
+        <button type="submit" class="w-full bg-saffron-500 text-white font-bold py-2.5 rounded-xl">Create Account</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADMIN VERIFICATION MODAL (PIN: 9090) -->
+  <div id="modal-admin-auth" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl relative">
+      <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark"></i></button>
+      <h3 class="font-extrabold text-base text-slate-900">Admin Key Required</h3>
+      <form onsubmit="verifyAdminPass(event)" class="space-y-3">
+        <input type="password" id="admin-pass-input" required placeholder="Enter Secret PIN" class="w-full px-4 py-2 border rounded-xl text-center font-bold tracking-widest">
+        <button type="submit" class="w-full bg-saffron-500 text-white font-bold py-2.5 rounded-xl text-xs">Access Panel</button>
+      </form>
+    </div>
+  </div>
+
+  <footer class="bg-navy-900 text-slate-400 text-xs py-4 text-center border-t border-slate-800">
+    JanSeva Portal © 2026. Dedicated Community Welfare Hub.
   </footer>
 
   <script>
-    // Supabase Auto Config
-    const SUPABASE_URL = window.env?.NEXT_PUBLIC_SUPABASE_URL || "https://your-project-id.supabase.co";
-    const SUPABASE_ANON_KEY = window.env?.NEXT_PUBLIC_SUPABASE_ANON_KEY || "your-actual-anon-key";
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const EMAILJS_PUBLIC_KEY = "ksoTV5zQ53zAplH0I";
+    const EMAILJS_SERVICE_ID  = "service_nynf5gn";
+    const EMAILJS_TEMPLATE_ID = "template_7xqo30g";
 
-    // EmailJS Setup
-    (function() { emailjs.init("ksoTV5zQ53zAplH0I"); })();
+    if(EMAILJS_PUBLIC_KEY) emailjs.init(EMAILJS_PUBLIC_KEY);
 
-    // Fetch Campaigns
-    async function loadCampaigns() {
-      const container = document.getElementById('campaigns-container');
-      const { data, error } = await supabaseClient.from('campaigns').select('*');
+    let defaultCampaigns = [
+      { id: 'C1', title: 'Child Education & Digital Literacy Drive', category: 'Education', city: 'New Delhi', goal: 500000, raised: 385000, image: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=600&q=80' },
+      { id: 'C2', title: 'Daily Meal Ration for Wagers', category: 'Food Relief', city: 'Mumbai', goal: 800000, raised: 620000, image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=600&q=80' }
+    ];
 
-      if (error || !data || data.length === 0) {
-        container.innerHTML = '<p style="color:var(--text-muted);">No active campaigns at present.</p>';
-        return;
-      }
-
-      container.innerHTML = data.map(item => {
-        const percent = Math.min(100, Math.round((item.raised_amount / item.target_amount) * 100));
-        return `
-          <div class="card">
-            <div class="card-icon"><i class="fa-solid ${item.icon || 'fa-heart'}"></i></div>
-            <h3>${item.title}</h3>
-            <p>${item.description}</p>
-            <div class="progress-bar"><div class="progress-fill" style="width: ${percent}%;"></div></div>
-            <div style="display:flex; justify-between:space-between; font-size:0.85rem; font-weight:700; margin-top:0.5rem;">
-              <span>Raised: ₹${item.raised_amount.toLocaleString()}</span>
-              <span>Target: ₹${item.target_amount.toLocaleString()}</span>
-            </div>
-          </div>
-        `;
-      }).join('');
+    function initData() {
+      if (!localStorage.getItem('js_campaigns')) localStorage.setItem('js_campaigns', JSON.stringify(defaultCampaigns));
+      if (!localStorage.getItem('js_requests')) localStorage.setItem('js_requests', JSON.stringify([]));
+      if (!localStorage.getItem('js_users')) localStorage.setItem('js_users', JSON.stringify([]));
+      renderCampaigns();
+      checkActiveUser();
     }
 
-    // Submit Request (Save Data + EmailJS)
-    document.getElementById('help-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const btn = document.getElementById('submit-btn');
-      btn.disabled = true;
-      btn.innerText = "Saving Data...";
+    function renderCampaigns() {
+      const camps = JSON.parse(localStorage.getItem('js_campaigns')) || [];
+      const container = document.getElementById('user-campaigns-container');
+      container.innerHTML = camps.map(c => `
+        <div class="bg-white rounded-2xl border p-3.5 flex gap-3 shadow-sm">
+          <img src="${c.image}" class="w-20 h-20 rounded-xl object-cover">
+          <div class="flex-1 flex flex-col justify-between">
+            <div>
+              <span class="text-[9px] bg-slate-100 font-bold px-2 py-0.5 rounded text-slate-600">${c.category} • ${c.city}</span>
+              <h4 class="font-bold text-xs text-slate-900 line-clamp-1 mt-1">${c.title}</h4>
+            </div>
+            <div>
+              <div class="flex justify-between text-[10px] font-bold text-emerald-700">
+                <span>₹${Number(c.raised).toLocaleString('en-IN')}</span>
+                <span class="text-slate-400">Goal: ₹${Number(c.goal).toLocaleString('en-IN')}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
 
-      const ticketId = 'TICK-' + Math.floor(100000 + Math.random() * 900000);
-      const payload = {
-        ticket_id: ticketId,
-        full_name: document.getElementById('full_name').value,
-        email: document.getElementById('email').value,
-        category: document.getElementById('category').value,
-        city: document.getElementById('city').value,
-        details: document.getElementById('details').value,
+    function handleUserSubmit(e) {
+      e.preventDefault();
+      const ticketId = 'JS-' + Math.floor(1000 + Math.random() * 9000);
+      const req = {
+        id: ticketId,
+        name: document.getElementById('usr-name').value,
+        email: document.getElementById('usr-email').value,
+        phone: document.getElementById('usr-phone').value,
+        city: document.getElementById('usr-city').value,
+        category: document.getElementById('usr-category').value,
+        concern: document.getElementById('usr-details').value,
         status: 'Pending'
       };
 
-      try {
-        const { error } = await supabaseClient.from('requests').insert([payload]);
-        if (error) throw error;
+      const reqs = JSON.parse(localStorage.getItem('js_requests')) || [];
+      reqs.unshift(req);
+      localStorage.setItem('js_requests', JSON.stringify(reqs));
 
-        await emailjs.send("service_nynf5gn", "template_7xqo30g", {
-          ticket_id: payload.ticket_id,
-          to_name: payload.full_name,
-          to_email: payload.email,
-          category: payload.category
-        });
-
-        alert(`Data Saved Successfully! Ticket ID: ${payload.ticket_id}`);
-        document.getElementById('help-form').reset();
-      } catch (err) {
-        alert("Error saving data: " + err.message);
-      } finally {
-        btn.disabled = false;
-        btn.innerText = "Save Data & Submit Request";
+      if(EMAILJS_PUBLIC_KEY && EMAILJS_SERVICE_ID) {
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+          to_name: req.name, to_email: req.email, ticket_id: req.id, category: req.category, concern_details: req.concern
+        }).catch(err => console.error("Email error:", err));
       }
-    });
 
-    // Video Slide Controller
-    function goToSlide(index) {
-      document.getElementById('slideTrack').style.transform = `translateX(-${index * 33.333}%)`;
-      const dots = document.querySelectorAll('.dot');
-      dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+      alert(`Request Submitted Successfully! Ticket Reference: ${ticketId}`);
+      e.target.reset();
     }
 
-    // FAQ Toggle
-    function toggleFaq(element) {
-      element.parentElement.classList.toggle('active');
+    function trackRequestStatus() {
+      const q = document.getElementById('track-id-input').value.trim().toUpperCase();
+      const box = document.getElementById('track-result-box');
+      const reqs = JSON.parse(localStorage.getItem('js_requests')) || [];
+      const found = reqs.find(r => r.id.toUpperCase() === q);
+      box.classList.remove('hidden');
+
+      if(found) {
+        box.className = `p-4 rounded-2xl border text-xs ${found.status === 'Resolved' ? 'bg-emerald-50 border-emerald-200' : 'bg-amber-50 border-amber-200'}`;
+        box.innerHTML = `<strong>Status: ${found.status}</strong><br>Category: ${found.category}<br>Details: ${found.concern}`;
+      } else {
+        box.className = "p-4 rounded-2xl border text-xs bg-red-50 border-red-200 text-red-600 font-bold";
+        box.innerHTML = "No ticket details matching this reference ID.";
+      }
     }
 
-    loadCampaigns();
+    function openMenuModal(type) {
+      const c = document.getElementById('menu-feature-content');
+      if(type === 'mcd') {
+        c.innerHTML = `<h3 class="font-extrabold text-base mb-2"><i class="fa-solid fa-city text-saffron-500"></i> MCD Civic Works</h3><p class="text-xs text-slate-600">Report broken roads, streetlights, garbage disposal, and water drainage complaints directly to municipal authorities.</p>`;
+      } else if(type === 'society') {
+        c.innerHTML = `<h3 class="font-extrabold text-base mb-2"><i class="fa-solid fa-users text-saffron-500"></i> Welfare For Society</h3><p class="text-xs text-slate-600">Community health drives, senior citizen assistance, parks maintenance, and local safety patrols.</p>`;
+      } else if(type === 'legal') {
+        c.innerHTML = `<h3 class="font-extrabold text-base mb-2"><i class="fa-solid fa-scale-balanced text-emerald-600"></i> Free Digital Legal Aid</h3><p class="text-xs text-slate-600">Connect with pro-bono lawyers for assistance with government schemes, land documentation, and fundamental rights protection.</p>`;
+      } else {
+        c.innerHTML = `<h3 class="font-extrabold text-base mb-2 text-red-600"><i class="fa-solid fa-phone"></i> Child Emergency Support</h3><p class="text-xs text-slate-600">24/7 Toll Free Emergency Service for Child Protection: <strong>1098</strong></p>`;
+      }
+      document.getElementById('modal-menu-feature').classList.remove('hidden');
+    }
+    function closeMenuModal() { document.getElementById('modal-menu-feature').classList.add('hidden'); }
+
+    function openAuthModal(t) { switchAuthTab(t); document.getElementById('modal-auth').classList.remove('hidden'); }
+    function closeAuthModal() { document.getElementById('modal-auth').classList.add('hidden'); }
+    function switchAuthTab(t) {
+      document.getElementById('form-login').classList.toggle('hidden', t !== 'login');
+      document.getElementById('form-signup').classList.toggle('hidden', t === 'login');
+    }
+
+    function handleSignupSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('signup-name').value;
+      const email = document.getElementById('signup-email').value;
+      const pass = document.getElementById('signup-pass').value;
+      const users = JSON.parse(localStorage.getItem('js_users')) || [];
+      users.push({ name, email, pass });
+      localStorage.setItem('js_users', JSON.stringify(users));
+      localStorage.setItem('js_active_user', JSON.stringify({ name, email }));
+      checkActiveUser(); closeAuthModal();
+    }
+
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const pass = document.getElementById('login-pass').value;
+      const users = JSON.parse(localStorage.getItem('js_users')) || [];
+      const found = users.find(u => u.email === email && u.pass === pass);
+      if(found) {
+        localStorage.setItem('js_active_user', JSON.stringify({ name: found.name, email: found.email }));
+        checkActiveUser(); closeAuthModal();
+      } else { alert('Invalid Login details'); }
+    }
+
+    function checkActiveUser() {
+      const active = JSON.parse(localStorage.getItem('js_active_user'));
+      const c = document.getElementById('auth-btn-container');
+      if(active) {
+        c.innerHTML = `<span class="text-xs text-saffron-500 font-bold">${active.name}</span> <button onclick="localStorage.removeItem('js_active_user'); checkActiveUser();" class="text-[10px] bg-red-600 text-white px-2 py-1 rounded">Logout</button>`;
+      } else {
+        c.innerHTML = `<button onclick="openAuthModal('login')" class="bg-saffron-500 text-white text-xs px-3.5 py-2 rounded-xl font-extrabold">Login / Sign Up</button>`;
+      }
+    }
+
+    function openAdminModal() { document.getElementById('modal-admin-auth').classList.remove('hidden'); }
+    function closeAdminModal() { document.getElementById('modal-admin-auth').classList.add('hidden'); }
+    function verifyAdminPass(e) {
+      e.preventDefault();
+      if(document.getElementById('admin-pass-input').value === '9090') window.location.href = 'admin.html';
+      else alert('Invalid Admin Pin');
+    }
+
+    window.addEventListener('DOMContentLoaded', initData);
   </script>
 </body>
 </html>
