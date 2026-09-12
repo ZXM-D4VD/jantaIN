@@ -3,171 +3,130 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JanSeva - Master Admin Dashboard</title>
+  <title>Admin Dashboard - Public Grievances</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: { saffron: { 500: '#ff9933', 600: '#ea580c' }, navy: { 800: '#031b33', 900: '#000080' } }
-        }
-      }
-    }
-  </script>
 </head>
-<body class="bg-slate-100 font-sans text-slate-800 flex flex-col min-h-screen">
+<body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-screen">
 
-  <header class="bg-navy-900 text-white px-6 py-4 shadow-md flex justify-between items-center">
-    <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-xl bg-saffron-500 flex items-center justify-center font-black">JS</div>
-      <div>
-        <h1 class="font-extrabold text-base">JanSeva Master Control Console</h1>
-        <p class="text-[11px] text-slate-400">Database & Portal Operations</p>
+  <header class="bg-slate-900 text-white sticky top-0 z-40 shadow-md">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></span>
+        <h1 class="font-extrabold text-base tracking-tight">Admin Portal (Realtime Console)</h1>
       </div>
+      <a href="index.html" class="text-xs bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl hover:bg-slate-700 transition">← Back to Main Site</a>
     </div>
-    <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-xs px-4 py-2 rounded-xl font-bold border border-slate-700 transition">View Web Portal</a>
   </header>
 
-  <main class="max-w-7xl mx-auto w-full px-6 py-6 flex-1 space-y-6">
+  <main class="max-w-6xl mx-auto px-4 py-6 space-y-6">
 
+    <!-- DATA STATS -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      <div class="bg-white border rounded-2xl p-4 flex justify-between items-center shadow-sm">
-        <div><p class="text-xs text-slate-500 font-bold uppercase">Requests</p><h3 id="stat-req-count" class="text-2xl font-black">0</h3></div>
-        <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-lg"><i class="fa-solid fa-inbox"></i></div>
+      <div class="bg-white p-4 rounded-2xl border shadow-sm">
+        <p class="text-xs font-bold text-slate-400">TOTAL REQUESTS</p>
+        <p id="stat-total" class="text-2xl font-black text-slate-900 mt-1">0</p>
       </div>
-      <div class="bg-white border rounded-2xl p-4 flex justify-between items-center shadow-sm">
-        <div><p class="text-xs text-slate-500 font-bold uppercase">Causes</p><h3 id="stat-camp-count" class="text-2xl font-black">0</h3></div>
-        <div class="w-10 h-10 bg-saffron-50 text-saffron-600 rounded-xl flex items-center justify-center text-lg"><i class="fa-solid fa-heart"></i></div>
+      <div class="bg-white p-4 rounded-2xl border shadow-sm">
+        <p class="text-xs font-bold text-amber-500">PENDING RESOLUTION</p>
+        <p id="stat-pending" class="text-2xl font-black text-amber-600 mt-1">0</p>
       </div>
-      <div class="bg-white border rounded-2xl p-4 flex justify-between items-center shadow-sm">
-        <div><p class="text-xs text-slate-500 font-bold uppercase">Registered Users</p><h3 id="stat-usr-count" class="text-2xl font-black">0</h3></div>
-        <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-lg"><i class="fa-solid fa-users"></i></div>
+      <div class="bg-white p-4 rounded-2xl border shadow-sm">
+        <p class="text-xs font-bold text-emerald-500">RESOLVED TICKETS</p>
+        <p id="stat-resolved" class="text-2xl font-black text-emerald-600 mt-1">0</p>
       </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-      <div class="lg:col-span-8 bg-white border rounded-3xl p-5 shadow-lg space-y-4">
-        <div class="flex justify-between items-center border-b pb-3">
-          <h3 class="font-extrabold text-base text-slate-900"><i class="fa-solid fa-list-check text-saffron-500"></i> Citizen Requests</h3>
-          <button onclick="clearAllRequests()" class="text-red-500 text-xs font-bold">Clear All</button>
-        </div>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs">
-            <thead>
-              <tr class="bg-slate-50 border-b text-slate-600 font-bold">
-                <th class="p-2.5">ID</th>
-                <th class="p-2.5">Citizen Details</th>
-                <th class="p-2.5">Category</th>
-                <th class="p-2.5">Status</th>
-                <th class="p-2.5 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="admin-req-tbody" class="divide-y"></tbody>
-          </table>
-        </div>
+    <!-- TICKET TABLE -->
+    <div class="bg-white rounded-3xl border shadow-sm overflow-hidden">
+      <div class="p-4 border-b flex justify-between items-center bg-slate-50/50">
+        <h2 class="font-extrabold text-sm text-slate-900">Submitted Citizen Grievances</h2>
+        <button onclick="clearAllData()" class="text-xs text-red-600 hover:underline font-bold">Clear Database</button>
       </div>
 
-      <div class="lg:col-span-4 bg-white border rounded-3xl p-5 shadow-lg space-y-4">
-        <div class="border-b pb-3">
-          <h3 class="font-extrabold text-base text-slate-900"><i class="fa-solid fa-square-plus text-saffron-500"></i> Add New Relief Cause</h3>
-        </div>
-        <form onsubmit="handleAddCampaign(event)" class="space-y-3 text-xs">
-          <input type="text" id="camp-title" required placeholder="Title" class="w-full p-2.5 border rounded-xl">
-          <div class="grid grid-cols-2 gap-2">
-            <input type="text" id="camp-cat" required placeholder="Category" class="w-full p-2.5 border rounded-xl">
-            <input type="text" id="camp-city" required placeholder="City" class="w-full p-2.5 border rounded-xl">
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <input type="number" id="camp-goal" required placeholder="Goal (₹)" class="w-full p-2.5 border rounded-xl">
-            <input type="number" id="camp-raised" required placeholder="Raised (₹)" class="w-full p-2.5 border rounded-xl">
-          </div>
-          <input type="url" id="camp-img" required placeholder="Image URL" class="w-full p-2.5 border rounded-xl">
-          <button type="submit" class="w-full bg-saffron-500 text-white font-extrabold py-2.5 rounded-xl">Publish Cause</button>
-        </form>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs">
+          <thead>
+            <tr class="bg-slate-100 text-slate-600 border-b">
+              <th class="p-3 font-bold">Ticket ID</th>
+              <th class="p-3 font-bold">Applicant</th>
+              <th class="p-3 font-bold">Contact</th>
+              <th class="p-3 font-bold">Category</th>
+              <th class="p-3 font-bold">Details</th>
+              <th class="p-3 font-bold">Status</th>
+              <th class="p-3 font-bold text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody id="admin-table-body" class="divide-y">
+            <!-- Dynamic Injection -->
+          </tbody>
+        </table>
       </div>
-
     </div>
 
   </main>
 
   <script>
-    function loadAdminData() {
-      const reqs = JSON.parse(localStorage.getItem('js_requests')) || [];
-      const camps = JSON.parse(localStorage.getItem('js_campaigns')) || [];
-      const users = JSON.parse(localStorage.getItem('js_users')) || [];
+    // LISTEN FOR LIVE UPDATES ACROSS TABS
+    if ('BroadcastChannel' in window) {
+      const bc = new BroadcastChannel('js_sync_channel');
+      bc.onmessage = (event) => {
+        if (event.data.type === 'NEW_REQUEST') {
+          renderAdminData();
+        }
+      };
+    }
 
-      document.getElementById('stat-req-count').innerText = reqs.length;
-      document.getElementById('stat-camp-count').innerText = camps.length;
-      document.getElementById('stat-usr-count').innerText = users.length;
+    function renderAdminData() {
+      const records = JSON.parse(localStorage.getItem('js_global_requests')) || [];
+      const tbody = document.getElementById('admin-table-body');
+      
+      document.getElementById('stat-total').innerText = records.length;
+      document.getElementById('stat-pending').innerText = records.filter(r => r.status === 'Pending').length;
+      document.getElementById('stat-resolved').innerText = records.filter(r => r.status === 'Resolved').length;
 
-      const tbody = document.getElementById('admin-req-tbody');
-      tbody.innerHTML = '';
-
-      if(reqs.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">No requests recorded.</td></tr>`;
+      if (records.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">No public requests found in system database.</td></tr>`;
         return;
       }
 
-      reqs.forEach((r) => {
-        const isResolved = r.status === 'Resolved';
-        const tr = document.createElement('tr');
-        tr.className = "hover:bg-slate-50 transition";
-        tr.innerHTML = `
-          <td class="p-2.5 font-bold text-saffron-600">${r.id}</td>
-          <td class="p-2.5"><div class="font-bold">${r.name}</div><div class="text-[10px] text-slate-400">${r.phone} • ${r.city}</div></td>
-          <td class="p-2.5">${r.category}</td>
-          <td class="p-2.5"><span class="px-2 py-0.5 rounded-full font-bold text-[10px] ${isResolved ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${r.status}</span></td>
-          <td class="p-2.5 text-right space-x-1">
-            <button onclick="toggleReqStatus('${r.id}')" class="bg-navy-900 text-white text-[10px] px-2 py-1 rounded-lg">${isResolved ? 'Mark Pending' : 'Mark Resolved'}</button>
-            <button onclick="deleteReq('${r.id}')" class="text-red-500 p-1"><i class="fa-solid fa-trash"></i></button>
+      tbody.innerHTML = records.map((r, idx) => `
+        <tr class="hover:bg-slate-50/80 transition">
+          <td class="p-3 font-mono font-bold text-slate-900">${r.id}</td>
+          <td class="p-3 font-bold">${r.name}<br><span class="text-[10px] text-slate-400 font-normal">${r.city}</span></td>
+          <td class="p-3 text-slate-600">${r.phone}<br><span class="text-[10px] text-slate-400">${r.email}</span></td>
+          <td class="p-3"><span class="bg-slate-100 px-2 py-0.5 rounded text-[10px] font-semibold">${r.category}</span></td>
+          <td class="p-3 max-w-xs text-slate-600 truncate">${r.concern}</td>
+          <td class="p-3">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${r.status === 'Resolved' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">
+              ${r.status}
+            </span>
           </td>
-        `;
-        tbody.appendChild(tr);
-      });
+          <td class="p-3 text-right">
+            <button onclick="toggleStatus(${idx})" class="px-2.5 py-1 text-[10px] font-bold rounded-lg bg-slate-900 text-white hover:bg-slate-800 transition">
+              Toggle Status
+            </button>
+          </td>
+        </tr>
+      `).join('');
     }
 
-    function toggleReqStatus(id) {
-      let reqs = JSON.parse(localStorage.getItem('js_requests')) || [];
-      reqs = reqs.map(r => { if(r.id === id) r.status = (r.status === 'Resolved' ? 'Pending' : 'Resolved'); return r; });
-      localStorage.setItem('js_requests', JSON.stringify(reqs));
-      loadAdminData();
+    function toggleStatus(idx) {
+      const records = JSON.parse(localStorage.getItem('js_global_requests')) || [];
+      records[idx].status = records[idx].status === 'Pending' ? 'Resolved' : 'Pending';
+      localStorage.setItem('js_global_requests', JSON.stringify(records));
+      renderAdminData();
     }
 
-    function deleteReq(id) {
-      let reqs = JSON.parse(localStorage.getItem('js_requests')) || [];
-      reqs = reqs.filter(r => r.id !== id);
-      localStorage.setItem('js_requests', JSON.stringify(reqs));
-      loadAdminData();
-    }
-
-    function clearAllRequests() {
-      if(confirm("Delete all citizen requests?")) {
-        localStorage.setItem('js_requests', JSON.stringify([]));
-        loadAdminData();
+    function clearAllData() {
+      if (confirm("Are you sure you want to clear all requests?")) {
+        localStorage.removeItem('js_global_requests');
+        renderAdminData();
       }
     }
 
-    function handleAddCampaign(e) {
-      e.preventDefault();
-      const title = document.getElementById('camp-title').value;
-      const category = document.getElementById('camp-cat').value;
-      const city = document.getElementById('camp-city').value;
-      const goal = Number(document.getElementById('camp-goal').value);
-      const raised = Number(document.getElementById('camp-raised').value);
-      const image = document.getElementById('camp-img').value;
-
-      const camps = JSON.parse(localStorage.getItem('js_campaigns')) || [];
-      camps.unshift({ id: 'C' + (camps.length + 1), title, category, city, goal, raised, image });
-      localStorage.setItem('js_campaigns', JSON.stringify(camps));
-      alert("Campaign Published!");
-      e.target.reset();
-      loadAdminData();
-    }
-
-    window.addEventListener('DOMContentLoaded', loadAdminData);
+    // Initialize Dashboard Data
+    window.onload = renderAdminData;
   </script>
 </body>
 </html>
