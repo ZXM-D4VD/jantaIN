@@ -1,0 +1,18 @@
+{
+  "name": "janseva-portal",
+  "version": "1.0.0",
+  "description": "Public Welfare and NGO Assistance Web Application",
+  "private": true,
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx live-server ."
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.4",
+    "@emailjs/browser": "^4.4.1"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "serve": "^14.2.4"
+  }
+}

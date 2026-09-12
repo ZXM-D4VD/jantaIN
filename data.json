@@ -1,0 +1,25 @@
+{
+  "campaigns": [
+    {
+      "title": "Nutritious Meals for Children",
+      "description": "Provide healthy meals and nutrition kits to children in vulnerable communities.",
+      "target_amount": 250000,
+      "raised_amount": 142500,
+      "icon": "fa-bowl-food"
+    },
+    {
+      "title": "Education Support Fund",
+      "description": "Help children receive books, uniforms, school supplies and fee assistance.",
+      "target_amount": 400000,
+      "raised_amount": 218000,
+      "icon": "fa-school"
+    },
+    {
+      "title": "Emergency Medical Assistance",
+      "description": "Support urgent medical treatment for families who cannot afford care.",
+      "target_amount": 500000,
+      "raised_amount": 307000,
+      "icon": "fa-truck-medical"
+    }
+  ]
+}

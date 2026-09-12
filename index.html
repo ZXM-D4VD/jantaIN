@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JanSeva Portal - Public Welfare & NGO Assistance</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#102a43">
+  <!-- FontAwesome & Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Supabase & EmailJS JS SDKs -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #102a43;
+      --secondary: #243b53;
+      --accent: #d97706;
+      --bg: #fffaf2;
+      --card-bg: #ffffff;
+      --text: #102a43;
+      --text-muted: #627d98;
+      --border: #e4e7eb;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { background-color: var(--bg); color: var(--text); line-height: 1.6; }
+    header { background: var(--primary); color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+    .logo { font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; color: #fbbf24; }
+    nav a { color: white; text-decoration: none; margin-left: 1.5rem; font-weight: 500; transition: color 0.2s; }
+    nav a:hover { color: #fbbf24; }
+    .hero { text-align: center; padding: 4rem 1rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; }
+    .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+    .hero p { max-width: 600px; margin: 0 auto 2rem auto; opacity: 0.9; }
+    .container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+    .card { background: var(--card-bg); border-radius: var(--radius); padding: 1.5rem; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .card h3 { color: var(--primary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+    form { display: flex; flex-direction: column; gap: 1rem; }
+    input, select, textarea { width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; }
+    button { background: var(--accent); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    button:hover { background: #b45309; }
+    .progress-bar { background: #e4e7eb; border-radius: 10px; height: 10px; overflow: hidden; margin: 0.5rem 0; }
+    .progress-fill { background: #10b981; height: 100%; width: 0%; transition: width 0.3s; }
+    footer { text-align: center; padding: 2rem; background: var(--primary); color: white; margin-top: 4rem; }
+    @media (max-width: 600px) { header { flex-direction: column; gap: 1rem; text-align: center; } nav a { margin: 0 0.5rem; } }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo"><i class="fa-solid fa-hands-holding-child"></i> JanSeva Portal</div>
+    <nav>
+      <a href="#services">Services</a>
+      <a href="#campaigns">Campaigns</a>
+      <a href="#request">Request Help</a>
+      <a href="admin.html">Admin Login</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Public Welfare & NGO Assistance Portal</h1>
+    <p>Connecting citizens in need with public services, community welfare programs, and emergency assistance.</p>
+    <a href="#request" style="display:inline-block; background:#d97706; color:white; padding:0.8rem 2rem; border-radius:8px; text-decoration:none; font-weight:600;">Request Assistance</a>
+  </section>
+
+  <div class="container">
+    <section id="services" style="margin-bottom: 3rem;">
+      <h2 style="margin-bottom: 1.5rem; color: var(--primary);">Our Services & Civic Support</h2>
+      <div class="grid">
+        <div class="card">
+          <h3><i class="fa-solid fa-city" style="color:#2563eb;"></i> MCD Services</h3>
+          <p>Assistance with sanitation requests, local infrastructure repair, street lights, and civic cleanliness drives.</p>
+        </div>
+        <div class="card">
+          <h3><i class="fa-solid fa-people-roof" style="color:#059669;"></i> Society Welfare</h3>
+          <p>Community support including food distribution drives, elderly care, and local health checkup camps.</p>
+        </div>
+        <div class="card">
+          <h3><i class="fa-solid fa-briefcase-medical" style="color:#dc2626;"></i> Emergency Aid</h3>
+          <p>Rapid response coordination for medical emergencies, blood requirement requests, and disaster relief.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="campaigns" style="margin-bottom: 3rem;">
+      <h2 style="margin-bottom: 1.5rem; color: var(--primary);">Active Welfare Campaigns</h2>
+      <div class="grid" id="campaigns-container">
+        <!-- Dynamically Loaded -->
+      </div>
+    </section>
+
+    <section id="request">
+      <div class="card" style="max-width: 600px; margin: 0 auto;">
+        <h3><i class="fa-solid fa-paper-plane" style="color:var(--accent);"></i> Submit Assistance Request</h3>
+        <p style="margin-bottom: 1rem; color: var(--text-muted); font-size: 0.9rem;">Fill out the form below to register a request for help or community service.</p>
+        <form id="help-request-form">
+          <input type="text" id="full_name" placeholder="Full Name" required>
+          <input type="email" id="email" placeholder="Email Address" required>
+          <select id="category" required>
+            <option value="">Select Request Category</option>
+            <option value="MCD Services">MCD Sanitation / Infrastructure</option>
+            <option value="Society Welfare">Society & Community Welfare</option>
+            <option value="Emergency Medical">Emergency Medical Support</option>
+            <option value="Education Aid">Education Assistance</option>
+          </select>
+          <input type="text" id="city" placeholder="City / Region" required>
+          <button type="submit" id="submit-btn">Submit Request</button>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 JanSeva Portal. Serving Communities with Integrity.</p>
+  </footer>
+
+  <script>
+    // Initialize Supabase & EmailJS
+    const SUPABASE_URL = "https://your-project-id.supabase.co";
+    const SUPABASE_ANON_KEY = "your-actual-anon-key";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    (function() {
+      emailjs.init("ksoTV5zQ53zAplH0I");
+    })();
+
+    // Load Live Campaigns
+    async function fetchCampaigns() {
+      const container = document.getElementById('campaigns-container');
+      const { data, error } = await supabaseClient.from('campaigns').select('*');
+      
+      if (error || !data || data.length === 0) {
+        container.innerHTML = '<p>No active campaigns at the moment.</p>';
+        return;
+      }
+
+      container.innerHTML = data.map(item => {
+        const percent = Math.min(100, Math.round((item.raised_amount / item.target_amount) * 100));
+        return `
+          <div class="card">
+            <h3><i class="fa-solid ${item.icon || 'fa-heart'}" style="color:#d97706;"></i> ${item.title}</h3>
+            <p style="color:var(--text-muted); font-size:0.9rem;">${item.description}</p>
+            <div style="margin-top: 1rem;">
+              <div style="display:flex; justify-between:space-between; font-size:0.85rem; font-weight:600;">
+                <span>Raised: ₹${item.raised_amount.toLocaleString()}</span>
+                <span>Goal: ₹${item.target_amount.toLocaleString()}</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: ${percent}%;"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Submit Request
+    document.getElementById('help-request-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.innerText = "Submitting...";
+
+      const ticketId = 'TICK-' + Math.floor(100000 + Math.random() * 900000);
+      const payload = {
+        ticket_id: ticketId,
+        full_name: document.getElementById('full_name').value,
+        email: document.getElementById('email').value,
+        category: document.getElementById('category').value,
+        city: document.getElementById('city').value,
+        status: 'Pending'
+      };
+
+      try {
+        const { error } = await supabaseClient.from('requests').insert([payload]);
+        if (error) throw error;
+
+        // Send Email Notification via EmailJS
+        await emailjs.send("service_nynf5gn", "template_7xqo30g", {
+          ticket_id: payload.ticket_id,
+          to_name: payload.full_name,
+          to_email: payload.email,
+          category: payload.category
+        });
+
+        alert(`Request submitted successfully! Ticket ID: ${payload.ticket_id}`);
+        document.getElementById('help-request-form').reset();
+      } catch (err) {
+        alert("Submission failed: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Submit Request";
+      }
+    });
+
+    fetchCampaigns();
+  </script>
+</body>
+</html>
