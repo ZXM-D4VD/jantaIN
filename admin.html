@@ -19,7 +19,6 @@
 </head>
 <body class="bg-slate-100 font-sans text-slate-800 flex flex-col min-h-screen">
 
-  <!-- HEADER -->
   <header class="bg-navy-900 text-white px-6 py-4 shadow-md flex justify-between items-center">
     <div class="flex items-center gap-3">
       <div class="w-10 h-10 rounded-xl bg-saffron-500 flex items-center justify-center font-black">JS</div>
@@ -28,13 +27,11 @@
         <p class="text-[11px] text-slate-400">Database & Portal Operations</p>
       </div>
     </div>
-    <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-xs px-4 py-2 rounded-xl font-bold border border-slate-700 transition">View Public Web Portal</a>
+    <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-xs px-4 py-2 rounded-xl font-bold border border-slate-700 transition">View Web Portal</a>
   </header>
 
-  <!-- DASHBOARD CONTENT -->
   <main class="max-w-7xl mx-auto w-full px-6 py-6 flex-1 space-y-6">
 
-    <!-- METRICS OVERVIEW -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <div class="bg-white border rounded-2xl p-4 flex justify-between items-center shadow-sm">
         <div><p class="text-xs text-slate-500 font-bold uppercase">Requests</p><h3 id="stat-req-count" class="text-2xl font-black">0</h3></div>
@@ -50,10 +47,8 @@
       </div>
     </div>
 
-    <!-- MAIN INTERACTION PANELS -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-      <!-- REQUEST MANAGEMENT TABLE -->
       <div class="lg:col-span-8 bg-white border rounded-3xl p-5 shadow-lg space-y-4">
         <div class="flex justify-between items-center border-b pb-3">
           <h3 class="font-extrabold text-base text-slate-900"><i class="fa-solid fa-list-check text-saffron-500"></i> Citizen Requests</h3>
@@ -75,7 +70,6 @@
         </div>
       </div>
 
-      <!-- ADD NEW CAMPAIGN -->
       <div class="lg:col-span-4 bg-white border rounded-3xl p-5 shadow-lg space-y-4">
         <div class="border-b pb-3">
           <h3 class="font-extrabold text-base text-slate-900"><i class="fa-solid fa-square-plus text-saffron-500"></i> Add New Relief Cause</h3>
@@ -168,7 +162,7 @@
       const camps = JSON.parse(localStorage.getItem('js_campaigns')) || [];
       camps.unshift({ id: 'C' + (camps.length + 1), title, category, city, goal, raised, image });
       localStorage.setItem('js_campaigns', JSON.stringify(camps));
-      alert("Campaign Created!");
+      alert("Campaign Published!");
       e.target.reset();
       loadAdminData();
     }
