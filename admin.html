@@ -15,7 +15,7 @@
 
     .header { background: var(--primary); color: white; padding: 1.2rem 2rem; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-    .stat-card { background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); }
+    .stat-card { background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
     .stat-card h4 { color: #64748b; font-size: 0.85rem; text-transform: uppercase; }
     .stat-card p { font-size: 1.8rem; font-weight: 800; margin-top: 0.4rem; color: var(--accent); }
 
@@ -37,34 +37,35 @@
 <body>
 
   <div id="login-gate" class="card">
-    <h2 style="margin-bottom:1rem;"><i class="fa-solid fa-shield-halved" style="color:var(--accent);"></i> Admin Gate</h2>
-    <input type="password" id="passkey" placeholder="Enter Access Code (9090)" style="width:100%; margin-bottom:1rem;">
-    <button onclick="login()" style="width:100%;">Unlock Console</button>
+    <h2 style="margin-bottom:1rem;"><i class="fa-solid fa-shield-halved" style="color:var(--accent);"></i> Admin Login</h2>
+    <input type="password" id="passkey" placeholder="Enter Code (9090)" style="width:100%; margin-bottom:1rem;">
+    <button onclick="login()" style="width:100%;">Unlock Admin Dashboard</button>
   </div>
 
   <div id="admin-panel" style="display:none;">
     <div class="header">
-      <h2><i class="fa-solid fa-gauge-high"></i> JanSeva Admin Portal</h2>
+      <h2><i class="fa-solid fa-gauge-high"></i> JanSeva Admin Console</h2>
       <a href="index.html" style="color:white; text-decoration:none; font-weight:600;"><i class="fa-solid fa-arrow-right-from-bracket"></i> Exit</a>
     </div>
 
     <div class="stats-grid">
       <div class="stat-card"><h4>Total Requests</h4><p id="stat-total">0</p></div>
-      <div class="stat-card"><h4>Pending Issues</h4><p id="stat-pending" style="color:#d97706;">0</p></div>
-      <div class="stat-card"><h4>Resolved Issues</h4><p id="stat-resolved" style="color:#059669;">0</p></div>
+      <div class="stat-card"><h4>Pending Tickets</h4><p id="stat-pending" style="color:#d97706;">0</p></div>
+      <div class="stat-card"><h4>Resolved Tickets</h4><p id="stat-resolved" style="color:#059669;">0</p></div>
     </div>
 
-    <!-- Live Requests Database Table -->
+    <!-- Live Requests Table -->
     <div class="card">
-      <h3><i class="fa-solid fa-database"></i> Saved User Submissions (Realtime Sync)</h3>
+      <h3><i class="fa-solid fa-database"></i> Saved User Requests (Realtime)</h3>
       <table>
         <thead>
           <tr>
-            <th>Ticket</th>
+            <th>Ticket ID</th>
             <th>Name</th>
             <th>Email</th>
             <th>Category</th>
             <th>City</th>
+            <th>Details</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
@@ -73,15 +74,15 @@
       </table>
     </div>
 
-    <!-- Campaign Publisher -->
+    <!-- Add New Campaign Form -->
     <div class="card">
-      <h3><i class="fa-solid fa-plus"></i> Create New Campaign</h3>
+      <h3><i class="fa-solid fa-plus-circle"></i> Create New Campaign</h3>
       <form id="campaign-form" style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin-top:1rem;">
         <input type="text" id="c-title" placeholder="Campaign Title" required>
         <input type="number" id="c-target" placeholder="Target Amount (₹)" required>
         <input type="text" id="c-icon" placeholder="Icon Class (e.g. fa-school)" required>
         <textarea id="c-desc" placeholder="Campaign Description..." style="grid-column: span 2;" required></textarea>
-        <button type="submit" style="grid-column: span 2;">Publish to Live Portal</button>
+        <button type="submit" style="grid-column: span 2;">Publish Campaign</button>
       </form>
     </div>
   </div>
@@ -92,7 +93,7 @@
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     function escapeHtml(str) {
-      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
     function login() {
@@ -101,7 +102,7 @@
         document.getElementById('admin-panel').style.display = 'block';
         fetchRequests();
         subscribeRealtime();
-      } else { alert("Wrong Passcode!"); }
+      } else { alert("Incorrect Passcode!"); }
     }
 
     async function fetchRequests() {
@@ -119,6 +120,7 @@
           <td>${escapeHtml(r.email)}</td>
           <td>${escapeHtml(r.category)}</td>
           <td>${escapeHtml(r.city)}</td>
+          <td>${escapeHtml(r.details)}</td>
           <td><span class="badge ${r.status === 'Resolved' ? 'badge-resolved' : 'badge-pending'}">${escapeHtml(r.status)}</span></td>
           <td>
             <button onclick="toggleStatus('${r.id}', '${r.status}')" style="padding:0.3rem 0.6rem; font-size:0.8rem;">Toggle Status</button>
