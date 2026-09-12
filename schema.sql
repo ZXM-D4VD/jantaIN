@@ -1,6 +1,5 @@
--- JANSEVA PRODUCTION DATABASE SCHEMA
+-- JANSEVA GLOBAL CLOUD DATABASE SCHEMA
 
--- 1. CAMPAIGN TABLE
 CREATE TABLE IF NOT EXISTS public.js_campaigns (
     id TEXT PRIMARY KEY,
     title TEXT NOT NULL,
@@ -12,7 +11,6 @@ CREATE TABLE IF NOT EXISTS public.js_campaigns (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 2. EMERGENCY REQUESTS TABLE
 CREATE TABLE IF NOT EXISTS public.js_requests (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
@@ -25,7 +23,6 @@ CREATE TABLE IF NOT EXISTS public.js_requests (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 3. REGISTERED USERS TABLE
 CREATE TABLE IF NOT EXISTS public.js_users (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     name TEXT NOT NULL,
@@ -34,7 +31,19 @@ CREATE TABLE IF NOT EXISTS public.js_users (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- SEED INITIAL DATA
+-- Row Level Security Rules (Enable Public Access for API Reads & Inserts)
+ALTER TABLE public.js_requests ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.js_campaigns ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.js_users ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public Read Requests" ON public.js_requests FOR SELECT USING (true);
+CREATE POLICY "Public Insert Requests" ON public.js_requests FOR INSERT WITH CHECK (true);
+CREATE POLICY "Public Update Requests" ON public.js_requests FOR UPDATE USING (true);
+CREATE POLICY "Public Delete Requests" ON public.js_requests FOR DELETE USING (true);
+
+CREATE POLICY "Public Read Campaigns" ON public.js_campaigns FOR SELECT USING (true);
+CREATE POLICY "Public Insert Campaigns" ON public.js_campaigns FOR INSERT WITH CHECK (true);
+
 INSERT INTO public.js_campaigns (id, title, category, city, goal, raised, image)
 VALUES 
 ('C1', 'Child Education & Digital Literacy Drive', 'Education', 'New Delhi', 500000, 385000, 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=600&q=80'),
