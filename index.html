@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JanSeva Portal - Public Welfare & Citizen Services</title>
+  <title>JanSeva Portal - Citizen & Welfare Services</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0f172a">
   
@@ -23,7 +23,7 @@
       --text: #0f172a;
       --text-muted: #64748b;
       --border: #e2e8f0;
-      --shadow: 0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.01);
+      --shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
       --radius: 16px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -43,25 +43,23 @@
       border-bottom: 1px solid rgba(255,255,255,0.1);
     }
     .logo { font-size: 1.4rem; font-weight: 800; display: flex; align-items: center; gap: 0.6rem; color: #60a5fa; }
-    nav { display: flex; gap: 1.5rem; align-items: center; }
-    nav a { color: #cbd5e1; text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: 0.2s; }
+    nav { display: flex; gap: 1.2rem; align-items: center; }
+    nav a { color: #cbd5e1; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.2s; }
     nav a:hover { color: #60a5fa; }
-    .btn-nav { background: var(--accent); color: white !important; padding: 0.5rem 1.2rem; border-radius: 8px; }
+    .btn-nav { background: var(--accent); color: white !important; padding: 0.5rem 1rem; border-radius: 8px; }
 
     .hero {
-      position: relative;
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
       color: white;
-      padding: 5rem 1.5rem 6rem;
+      padding: 4.5rem 1.5rem 6rem;
       text-align: center;
-      overflow: hidden;
     }
-    .hero h1 { font-size: 2.8rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.02em; }
-    .hero p { max-width: 650px; margin: 0 auto 2rem; color: #94a3b8; font-size: 1.1rem; }
+    .hero h1 { font-size: 2.6rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.02em; }
+    .hero p { max-width: 650px; margin: 0 auto 2rem; color: #94a3b8; font-size: 1.05rem; }
 
     .container { max-width: 1200px; margin: -3rem auto 4rem; padding: 0 1.5rem; position: relative; z-index: 10; }
 
-    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
+    .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-bottom: 4rem; }
     
     .card {
       background: var(--card-bg);
@@ -69,21 +67,34 @@
       padding: 1.8rem;
       border: 1px solid var(--border);
       box-shadow: var(--shadow);
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    .card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
     .card-icon { width: 50px; height: 50px; border-radius: 12px; background: #eff6ff; color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 1.2rem; }
-    .card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .card p { color: var(--text-muted); font-size: 0.95rem; }
+    .card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .card p { color: var(--text-muted); font-size: 0.9rem; }
 
-    .video-section { margin: 4rem 0; background: white; padding: 2rem; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); }
-    .video-container { width: 100%; border-radius: 12px; overflow: hidden; background: #000; margin-top: 1rem; }
-    video { width: 100%; max-height: 480px; display: block; }
+    /* Video Slide Animation Section */
+    .video-slider-section { margin: 4rem 0; background: white; padding: 2rem; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); }
+    .slider-wrapper { position: relative; overflow: hidden; border-radius: 12px; background: #000; height: 400px; }
+    .slide-track { display: flex; width: 300%; height: 100%; transition: transform 0.5s ease-in-out; }
+    .slide { width: 33.333%; height: 100%; position: relative; flex-shrink: 0; }
+    video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .slider-controls { display: flex; justify-content: center; gap: 0.5rem; margin-top: 1rem; }
+    .dot { width: 12px; height: 12px; background: #cbd5e1; border-radius: 50%; cursor: pointer; transition: 0.2s; }
+    .dot.active { background: var(--accent); width: 28px; border-radius: 10px; }
+
+    /* FAQ Section */
+    .faq-section { margin: 4rem 0; }
+    .faq-item { background: white; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 0.8rem; overflow: hidden; }
+    .faq-question { padding: 1.2rem; font-weight: 700; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fff; }
+    .faq-answer { padding: 0 1.2rem 1.2rem; color: var(--text-muted); font-size: 0.95rem; display: none; }
+    .faq-item.active .faq-answer { display: block; }
 
     .form-container { background: white; padding: 2.5rem; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); max-width: 700px; margin: 0 auto; }
     .form-group { margin-bottom: 1.2rem; }
     .form-group label { display: block; font-weight: 600; margin-bottom: 0.4rem; font-size: 0.9rem; }
-    input, select, textarea { width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 1rem; outline: none; transition: 0.2s; }
+    input, select, textarea { width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); border-radius: 10px; font-size: 1rem; outline: none; }
     input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
     
     button { background: var(--accent); color: white; border: none; padding: 0.9rem 1.8rem; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; width: 100%; transition: 0.2s; }
@@ -92,8 +103,8 @@
     .progress-bar { background: #e2e8f0; border-radius: 20px; height: 10px; overflow: hidden; margin: 1rem 0 0.5rem; }
     .progress-fill { background: var(--accent); height: 100%; width: 0%; transition: width 0.4s; }
 
-    footer { background: var(--primary); color: #94a3b8; text-align: center; padding: 2.5rem 1rem; margin-top: 5rem; border-top: 1px solid rgba(255,255,255,0.1); }
-    @media (max-width: 768px) { nav { display: none; } .hero h1 { font-size: 2rem; } }
+    footer { background: var(--primary); color: #94a3b8; text-align: center; padding: 2.5rem 1rem; margin-top: 5rem; }
+    @media (max-width: 768px) { nav { display: none; } }
   </style>
 </head>
 <body>
@@ -101,64 +112,91 @@
   <header>
     <div class="logo"><i class="fa-solid fa-hands-holding-child"></i> JanSeva Portal</div>
     <nav>
-      <a href="#mcd-work">MCD Services</a>
+      <a href="#mcd-work">MCD Work</a>
       <a href="#society-welfare">Society Welfare</a>
-      <a href="#disaster-aid">Emergency & Relief</a>
+      <a href="#education-aid">Education Aid</a>
+      <a href="#disaster-relief">Disaster Relief</a>
       <a href="#campaigns">Campaigns</a>
+      <a href="#faqs">FAQs</a>
       <a href="admin.html" class="btn-nav">Admin Login</a>
     </nav>
   </header>
 
   <section class="hero">
     <h1>Public Welfare & Civic Governance</h1>
-    <p>Seamlessly access civic services, submit community issues, and track assistance requests in real-time.</p>
+    <p>Submit service requests, register complaints, and track community welfare programs in real-time.</p>
   </section>
 
   <div class="container">
     
-    <!-- 3 Core Options (MCD, Society Welfare, Disaster Relief) -->
-    <div class="grid-3" style="margin-bottom: 4rem;">
+    <!-- 4 Expanded Service Menus -->
+    <div class="grid-cards">
       <div class="card" id="mcd-work">
         <div class="card-icon"><i class="fa-solid fa-city"></i></div>
-        <h3>MCD Services & Infrastructure</h3>
-        <p>Report sanitation issues, road repairs, street light failures, and garbage maintenance directly to civic authorities.</p>
+        <h3>MCD Sanitation & Infrastructure</h3>
+        <p>Road repairs, streetlight installation, garbage management, and local sanitation drives.</p>
       </div>
 
       <div class="card" id="society-welfare">
         <div class="card-icon"><i class="fa-solid fa-people-roof"></i></div>
-        <h3>Society Welfare & Local Community</h3>
-        <p>Coordinate neighborhood security, senior citizen assistance, park upkeep, and local welfare programs.</p>
+        <h3>Society Welfare & Housing Support</h3>
+        <p>Residential security, elderly support, community park upkeep, and local welfare desks.</p>
       </div>
 
-      <div class="card" id="disaster-aid">
+      <div class="card" id="education-aid">
+        <div class="card-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+        <h3>Education & Skill Development</h3>
+        <p>Scholarship assistance, free book distribution, and youth vocational training programs.</p>
+      </div>
+
+      <div class="card" id="disaster-relief">
         <div class="card-icon"><i class="fa-solid fa-truck-droplet"></i></div>
-        <h3>Disaster Relief & Emergency Care</h3>
-        <p>Request fast-track medical emergency aid, disaster supplies, blood bank connectivity, and ambulance dispatch.</p>
+        <h3>Emergency & Disaster Relief</h3>
+        <p>Medical emergency support, disaster supply distribution, and fast blood donation response.</p>
       </div>
     </div>
 
-    <!-- HTML5 Native Video Section (Fixes Youtube Error) -->
-    <div class="video-section">
-      <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;"><i class="fa-solid fa-circle-play" style="color:var(--accent);"></i> Portal Awareness & Guide</h2>
-      <p style="color:var(--text-muted);">Watch how your submitted requests are processed and verified by local representatives.</p>
-      <div class="video-container">
-        <video controls poster="https://images.unsplash.com/photo-1532629345422-7515f3d16bb0?w=1200">
-          <source src="assets/guide-video.mp4" type="video/mp4">
-          Your browser does not support HTML5 video tags.
-        </video>
+    <!-- Animated Local Video Slider (Downloaded Videos Fix) -->
+    <div class="video-slider-section">
+      <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;"><i class="fa-solid fa-play-circle" style="color:var(--accent);"></i> Video Awareness Showcase</h2>
+      <p style="color:var(--text-muted); margin-bottom: 1rem;">Slide through uploaded guidance and operational videos.</p>
+      
+      <div class="slider-wrapper">
+        <div class="slide-track" id="slideTrack">
+          <div class="slide">
+            <video controls poster="https://images.unsplash.com/photo-1532629345422-7515f3d16bb0?w=1200">
+              <source src="assets/video1.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="slide">
+            <video controls poster="https://images.unsplash.com/photo-1593113598332-cd288d649433?w=1200">
+              <source src="assets/video2.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="slide">
+            <video controls poster="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1200">
+              <source src="assets/video3.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      <div class="slider-controls">
+        <div class="dot active" onclick="goToSlide(0)"></div>
+        <div class="dot" onclick="goToSlide(1)"></div>
+        <div class="dot" onclick="goToSlide(2)"></div>
       </div>
     </div>
 
     <!-- Active Campaigns -->
     <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 1.5rem;" id="campaigns">Active Welfare Campaigns</h2>
-    <div class="grid-3" id="campaigns-container" style="margin-bottom: 4rem;">
-      <!-- Loaded dynamically via Supabase -->
+    <div class="grid-cards" id="campaigns-container">
+      <!-- Loaded dynamically -->
     </div>
 
     <!-- Request Form -->
     <div class="form-container" id="request-form-section">
-      <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.5rem;"><i class="fa-solid fa-paper-plane" style="color:var(--accent);"></i> Register Help Request</h2>
-      <p style="color:var(--text-muted); margin-bottom: 1.5rem;">Submit your details. Data is securely saved to Supabase and an email confirmation will be sent.</p>
+      <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.5rem;"><i class="fa-solid fa-paper-plane" style="color:var(--accent);"></i> Register Service Request</h2>
+      <p style="color:var(--text-muted); margin-bottom: 1.5rem;">Your data will be securely stored and confirmation sent via EmailJS.</p>
       
       <form id="help-form">
         <div class="form-group">
@@ -174,30 +212,49 @@
           <select id="category" required>
             <option value="">-- Choose Option --</option>
             <option value="MCD Services">MCD Works & Sanitation</option>
-            <option value="Society Welfare">Society Welfare & Support</option>
-            <option value="Emergency & Relief">Disaster Relief & Medical Emergency</option>
+            <option value="Society Welfare">Society Welfare & Housing</option>
+            <option value="Education Aid">Education & Scholarships</option>
+            <option value="Disaster Relief">Emergency & Disaster Relief</option>
           </select>
         </div>
         <div class="form-group">
-          <label>City / Ward No.</label>
-          <input type="text" id="city" placeholder="e.g. Ward 14, Delhi" required>
+          <label>City / Ward Area</label>
+          <input type="text" id="city" placeholder="e.g. Ward 12, Delhi" required>
         </div>
         <div class="form-group">
           <label>Issue Details</label>
-          <textarea id="details" rows="3" placeholder="Provide description..." required></textarea>
+          <textarea id="details" rows="3" placeholder="Explain your request in detail..." required></textarea>
         </div>
-        <button type="submit" id="submit-btn">Submit & Save Data</button>
+        <button type="submit" id="submit-btn">Save Data & Submit Request</button>
       </form>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="faq-section" id="faqs">
+      <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 1.5rem;"><i class="fa-solid fa-circle-question" style="color:var(--accent);"></i> Frequently Asked Questions</h2>
+      
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">How are MCD requests handled? <i class="fa-solid fa-chevron-down"></i></div>
+        <div class="faq-answer">Requests are logged into our database and forwarded to local ward officers for immediate field resolution.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Will I get an email confirmation? <i class="fa-solid fa-chevron-down"></i></div>
+        <div class="faq-answer">Yes, as soon as you submit the form, EmailJS triggers a unique ticket ID to your registered email address.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">How can I track my request status? <i class="fa-solid fa-chevron-down"></i></div>
+        <div class="faq-answer">You can use your Ticket ID on the Admin Dashboard or contact local helpline representatives.</div>
+      </div>
     </div>
 
   </div>
 
   <footer>
-    <p>&copy; 2026 JanSeva Public Portal. Built for Citizen Welfare.</p>
+    <p>&copy; 2026 JanSeva Portal. Built for Citizen Welfare & Community Support.</p>
   </footer>
 
   <script>
-    // Supabase Auto-Config
+    // Supabase Auto Config
     const SUPABASE_URL = window.env?.NEXT_PUBLIC_SUPABASE_URL || "https://your-project-id.supabase.co";
     const SUPABASE_ANON_KEY = window.env?.NEXT_PUBLIC_SUPABASE_ANON_KEY || "your-actual-anon-key";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -205,13 +262,13 @@
     // EmailJS Setup
     (function() { emailjs.init("ksoTV5zQ53zAplH0I"); })();
 
-    // Fetch Campaigns from Supabase Data
+    // Fetch Campaigns
     async function loadCampaigns() {
       const container = document.getElementById('campaigns-container');
       const { data, error } = await supabaseClient.from('campaigns').select('*');
 
       if (error || !data || data.length === 0) {
-        container.innerHTML = '<p style="color:var(--text-muted);">No active campaigns found.</p>';
+        container.innerHTML = '<p style="color:var(--text-muted);">No active campaigns at present.</p>';
         return;
       }
 
@@ -223,7 +280,7 @@
             <h3>${item.title}</h3>
             <p>${item.description}</p>
             <div class="progress-bar"><div class="progress-fill" style="width: ${percent}%;"></div></div>
-            <div style="display:flex; justify-content:space-between; font-size:0.85rem; font-weight:700; margin-top:0.5rem;">
+            <div style="display:flex; justify-between:space-between; font-size:0.85rem; font-weight:700; margin-top:0.5rem;">
               <span>Raised: ₹${item.raised_amount.toLocaleString()}</span>
               <span>Target: ₹${item.target_amount.toLocaleString()}</span>
             </div>
@@ -232,7 +289,7 @@
       }).join('');
     }
 
-    // Submit Request + Save Data + Send EmailJS
+    // Submit Request (Save Data + EmailJS)
     document.getElementById('help-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('submit-btn');
@@ -251,11 +308,9 @@
       };
 
       try {
-        // Save to Database
         const { error } = await supabaseClient.from('requests').insert([payload]);
         if (error) throw error;
 
-        // Send Email Notification
         await emailjs.send("service_nynf5gn", "template_7xqo30g", {
           ticket_id: payload.ticket_id,
           to_name: payload.full_name,
@@ -269,9 +324,21 @@
         alert("Error saving data: " + err.message);
       } finally {
         btn.disabled = false;
-        btn.innerText = "Submit & Save Data";
+        btn.innerText = "Save Data & Submit Request";
       }
     });
+
+    // Video Slide Controller
+    function goToSlide(index) {
+      document.getElementById('slideTrack').style.transform = `translateX(-${index * 33.333}%)`;
+      const dots = document.querySelectorAll('.dot');
+      dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+    }
+
+    // FAQ Toggle
+    function toggleFaq(element) {
+      element.parentElement.classList.toggle('active');
+    }
 
     loadCampaigns();
   </script>
