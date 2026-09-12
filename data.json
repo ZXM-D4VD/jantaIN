@@ -15,11 +15,11 @@
       "icon": "fa-people-roof"
     },
     {
-      "title": "Disaster Relief Food & Medical Kits",
-      "description": "Emergency food ration and first aid kits deployment for flood and crisis hit areas.",
-      "target_amount": 500000,
-      "raised_amount": 340000,
-      "icon": "fa-truck-droplet"
+      "title": "Education Scholarship Fund",
+      "description": "Provide books, laptops, and fee support for underprivileged students.",
+      "target_amount": 400000,
+      "raised_amount": 250000,
+      "icon": "fa-graduation-cap"
     }
   ]
 }
