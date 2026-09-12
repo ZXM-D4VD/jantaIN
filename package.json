@@ -1,18 +1,15 @@
 {
-  "name": "janseva-portal",
+  "name": "janseva-welfare-portal",
   "version": "1.0.0",
-  "description": "Public Welfare and Citizen Governance Web Application",
-  "private": true,
+  "description": "Government & NGO Public Relief Portal",
+  "main": "index.html",
   "scripts": {
-    "start": "npx serve .",
-    "dev": "npx live-server ."
+    "start": "echo \"Open index.html in browser to run project\""
   },
+  "keywords": ["html5", "tailwindcss", "emailjs", "janseva", "supabase"],
+  "author": "JanSeva Team",
+  "license": "MIT",
   "dependencies": {
-    "@supabase/supabase-js": "^2.49.4",
-    "@emailjs/browser": "^4.4.1"
-  },
-  "devDependencies": {
-    "live-server": "^1.2.2",
-    "serve": "^14.2.4"
+    "@emailjs/browser": "^3.12.0"
   }
 }
