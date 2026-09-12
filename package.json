@@ -1,7 +1,7 @@
 {
   "name": "janseva-portal",
   "version": "1.0.0",
-  "description": "Public Welfare and NGO Assistance Web Application",
+  "description": "Public Welfare and Citizen Governance Web Application",
   "private": true,
   "scripts": {
     "start": "npx serve .",
