@@ -1,25 +1,24 @@
 {
-  "campaigns": [
+  "js_campaigns": [
     {
-      "title": "MCD Sanitation & Cleanliness Drive",
-      "description": "Provide cleaning equipment and safety gear for local sanitation workers.",
-      "target_amount": 150000,
-      "raised_amount": 85000,
-      "icon": "fa-city"
+      "id": "C1",
+      "title": "Child Education & Digital Literacy Drive",
+      "category": "Education",
+      "city": "New Delhi",
+      "goal": 500000,
+      "raised": 385000,
+      "image": "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=600&q=80"
     },
     {
-      "title": "Society Senior Citizen Health Desk",
-      "description": "Setup medical screening and emergency response desks in local housing societies.",
-      "target_amount": 300000,
-      "raised_amount": 190000,
-      "icon": "fa-people-roof"
-    },
-    {
-      "title": "Education Scholarship Fund",
-      "description": "Provide books, laptops, and fee support for underprivileged students.",
-      "target_amount": 400000,
-      "raised_amount": 250000,
-      "icon": "fa-graduation-cap"
+      "id": "C2",
+      "title": "Daily Meal Ration for Wagers",
+      "category": "Food Relief",
+      "city": "Mumbai",
+      "goal": 800000,
+      "raised": 620000,
+      "image": "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=600&q=80"
     }
-  ]
+  ],
+  "js_requests": [],
+  "js_users": []
 }
