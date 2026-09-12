@@ -1,5 +1,20 @@
 {
+  "{
   "short_name": "JanSeva",
+  "name": "JanSeva Public Relief Portal",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3090/3090422.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#031b33",
+  "theme_color": "#ff9933",
+  "display": "standalone"
+}
+": "JanSeva",
   "name": "JanSeva Public Relief Portal",
   "icons": [
     {
