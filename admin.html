@@ -3,156 +3,177 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JanSeva - Admin Control Dashboard</title>
+  <title>JanSeva - Master Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  
-  <style>
-    :root { --primary: #0f172a; --bg: #f1f5f9; --card: #ffffff; --border: #cbd5e1; --accent: #2563eb; }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-    body { background: var(--bg); color: var(--primary); padding: 1.5rem; }
-
-    .header { background: var(--primary); color: white; padding: 1.2rem 2rem; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-    .stat-card { background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-    .stat-card h4 { color: #64748b; font-size: 0.85rem; text-transform: uppercase; }
-    .stat-card p { font-size: 1.8rem; font-weight: 800; margin-top: 0.4rem; color: var(--accent); }
-
-    .card { background: var(--card); padding: 1.8rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 2rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-    th, td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
-    th { background: #f8fafc; font-weight: 700; color: #475569; }
-
-    .badge { padding: 0.3rem 0.7rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
-    .badge-pending { background: #fef3c7; color: #b45309; }
-    .badge-resolved { background: #d1fae5; color: #047857; }
-
-    input, select, textarea, button { padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border); outline: none; }
-    button { background: var(--accent); color: white; border: none; font-weight: 700; cursor: pointer; }
-
-    #login-gate { max-width: 400px; margin: 6rem auto; text-align: center; }
-  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { saffron: { 500: '#ff9933', 600: '#ea580c' }, navy: { 800: '#031b33', 900: '#000080' } }
+        }
+      }
+    }
+  </script>
 </head>
-<body>
+<body class="bg-slate-100 font-sans text-slate-800 flex flex-col min-h-screen">
 
-  <div id="login-gate" class="card">
-    <h2 style="margin-bottom:1rem;"><i class="fa-solid fa-shield-halved" style="color:var(--accent);"></i> Admin Login</h2>
-    <input type="password" id="passkey" placeholder="Enter Code (9090)" style="width:100%; margin-bottom:1rem;">
-    <button onclick="login()" style="width:100%;">Unlock Admin Dashboard</button>
-  </div>
+  <!-- HEADER -->
+  <header class="bg-navy-900 text-white px-6 py-4 shadow-md flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-saffron-500 flex items-center justify-center font-black">JS</div>
+      <div>
+        <h1 class="font-extrabold text-base">JanSeva Master Control Console</h1>
+        <p class="text-[11px] text-slate-400">Database & Portal Operations</p>
+      </div>
+    </div>
+    <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-xs px-4 py-2 rounded-xl font-bold border border-slate-700 transition">View Public Web Portal</a>
+  </header>
 
-  <div id="admin-panel" style="display:none;">
-    <div class="header">
-      <h2><i class="fa-solid fa-gauge-high"></i> JanSeva Admin Console</h2>
-      <a href="index.html" style="color:white; text-decoration:none; font-weight:600;"><i class="fa-solid fa-arrow-right-from-bracket"></i> Exit</a>
+  <!-- DASHBOARD CONTENT -->
+  <main class="max-w-7xl mx-auto w-full px-6 py-6 flex-1 space-y-6">
+
+    <!-- METRICS OVERVIEW -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div class="bg-white border rounded-2xl p-4 flex justify-between items-center shadow-sm">
+        <div><p class="text-xs text-slate-500 font-bold uppercase">Requests</p><h3 id="stat-req-count" class="text-2xl font-black">0</h3></div>
+        <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-lg"><i class="fa-solid fa-inbox"></i></div>
+      </div>
+      <div class="bg-white border rounded-2xl p-4 flex justify-between items-center shadow-sm">
+        <div><p class="text-xs text-slate-500 font-bold uppercase">Causes</p><h3 id="stat-camp-count" class="text-2xl font-black">0</h3></div>
+        <div class="w-10 h-10 bg-saffron-50 text-saffron-600 rounded-xl flex items-center justify-center text-lg"><i class="fa-solid fa-heart"></i></div>
+      </div>
+      <div class="bg-white border rounded-2xl p-4 flex justify-between items-center shadow-sm">
+        <div><p class="text-xs text-slate-500 font-bold uppercase">Registered Users</p><h3 id="stat-usr-count" class="text-2xl font-black">0</h3></div>
+        <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-lg"><i class="fa-solid fa-users"></i></div>
+      </div>
     </div>
 
-    <div class="stats-grid">
-      <div class="stat-card"><h4>Total Requests</h4><p id="stat-total">0</p></div>
-      <div class="stat-card"><h4>Pending Tickets</h4><p id="stat-pending" style="color:#d97706;">0</p></div>
-      <div class="stat-card"><h4>Resolved Tickets</h4><p id="stat-resolved" style="color:#059669;">0</p></div>
+    <!-- MAIN INTERACTION PANELS -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- REQUEST MANAGEMENT TABLE -->
+      <div class="lg:col-span-8 bg-white border rounded-3xl p-5 shadow-lg space-y-4">
+        <div class="flex justify-between items-center border-b pb-3">
+          <h3 class="font-extrabold text-base text-slate-900"><i class="fa-solid fa-list-check text-saffron-500"></i> Citizen Requests</h3>
+          <button onclick="clearAllRequests()" class="text-red-500 text-xs font-bold">Clear All</button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="bg-slate-50 border-b text-slate-600 font-bold">
+                <th class="p-2.5">ID</th>
+                <th class="p-2.5">Citizen Details</th>
+                <th class="p-2.5">Category</th>
+                <th class="p-2.5">Status</th>
+                <th class="p-2.5 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-req-tbody" class="divide-y"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ADD NEW CAMPAIGN -->
+      <div class="lg:col-span-4 bg-white border rounded-3xl p-5 shadow-lg space-y-4">
+        <div class="border-b pb-3">
+          <h3 class="font-extrabold text-base text-slate-900"><i class="fa-solid fa-square-plus text-saffron-500"></i> Add New Relief Cause</h3>
+        </div>
+        <form onsubmit="handleAddCampaign(event)" class="space-y-3 text-xs">
+          <input type="text" id="camp-title" required placeholder="Title" class="w-full p-2.5 border rounded-xl">
+          <div class="grid grid-cols-2 gap-2">
+            <input type="text" id="camp-cat" required placeholder="Category" class="w-full p-2.5 border rounded-xl">
+            <input type="text" id="camp-city" required placeholder="City" class="w-full p-2.5 border rounded-xl">
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <input type="number" id="camp-goal" required placeholder="Goal (₹)" class="w-full p-2.5 border rounded-xl">
+            <input type="number" id="camp-raised" required placeholder="Raised (₹)" class="w-full p-2.5 border rounded-xl">
+          </div>
+          <input type="url" id="camp-img" required placeholder="Image URL" class="w-full p-2.5 border rounded-xl">
+          <button type="submit" class="w-full bg-saffron-500 text-white font-extrabold py-2.5 rounded-xl">Publish Cause</button>
+        </form>
+      </div>
+
     </div>
 
-    <!-- Live Requests Table -->
-    <div class="card">
-      <h3><i class="fa-solid fa-database"></i> Saved User Requests (Realtime)</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Ticket ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Category</th>
-            <th>City</th>
-            <th>Details</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="requests-tbody"></tbody>
-      </table>
-    </div>
-
-    <!-- Add New Campaign Form -->
-    <div class="card">
-      <h3><i class="fa-solid fa-plus-circle"></i> Create New Campaign</h3>
-      <form id="campaign-form" style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin-top:1rem;">
-        <input type="text" id="c-title" placeholder="Campaign Title" required>
-        <input type="number" id="c-target" placeholder="Target Amount (₹)" required>
-        <input type="text" id="c-icon" placeholder="Icon Class (e.g. fa-school)" required>
-        <textarea id="c-desc" placeholder="Campaign Description..." style="grid-column: span 2;" required></textarea>
-        <button type="submit" style="grid-column: span 2;">Publish Campaign</button>
-      </form>
-    </div>
-  </div>
+  </main>
 
   <script>
-    const SUPABASE_URL = window.env?.NEXT_PUBLIC_SUPABASE_URL || "https://your-project-id.supabase.co";
-    const SUPABASE_ANON_KEY = window.env?.NEXT_PUBLIC_SUPABASE_ANON_KEY || "your-actual-anon-key";
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    function loadAdminData() {
+      const reqs = JSON.parse(localStorage.getItem('js_requests')) || [];
+      const camps = JSON.parse(localStorage.getItem('js_campaigns')) || [];
+      const users = JSON.parse(localStorage.getItem('js_users')) || [];
 
-    function escapeHtml(str) {
-      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-    }
+      document.getElementById('stat-req-count').innerText = reqs.length;
+      document.getElementById('stat-camp-count').innerText = camps.length;
+      document.getElementById('stat-usr-count').innerText = users.length;
 
-    function login() {
-      if (document.getElementById('passkey').value === "9090") {
-        document.getElementById('login-gate').style.display = 'none';
-        document.getElementById('admin-panel').style.display = 'block';
-        fetchRequests();
-        subscribeRealtime();
-      } else { alert("Incorrect Passcode!"); }
-    }
+      const tbody = document.getElementById('admin-req-tbody');
+      tbody.innerHTML = '';
 
-    async function fetchRequests() {
-      const { data, error } = await supabaseClient.from('requests').select('*').order('created_at', { ascending: false });
-      if (error) return;
+      if(reqs.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">No requests recorded.</td></tr>`;
+        return;
+      }
 
-      document.getElementById('stat-total').innerText = data.length;
-      document.getElementById('stat-pending').innerText = data.filter(d => d.status === 'Pending').length;
-      document.getElementById('stat-resolved').innerText = data.filter(d => d.status === 'Resolved').length;
-
-      document.getElementById('requests-tbody').innerHTML = data.map(r => `
-        <tr>
-          <td><b>${escapeHtml(r.ticket_id)}</b></td>
-          <td>${escapeHtml(r.full_name)}</td>
-          <td>${escapeHtml(r.email)}</td>
-          <td>${escapeHtml(r.category)}</td>
-          <td>${escapeHtml(r.city)}</td>
-          <td>${escapeHtml(r.details)}</td>
-          <td><span class="badge ${r.status === 'Resolved' ? 'badge-resolved' : 'badge-pending'}">${escapeHtml(r.status)}</span></td>
-          <td>
-            <button onclick="toggleStatus('${r.id}', '${r.status}')" style="padding:0.3rem 0.6rem; font-size:0.8rem;">Toggle Status</button>
+      reqs.forEach((r) => {
+        const isResolved = r.status === 'Resolved';
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50 transition";
+        tr.innerHTML = `
+          <td class="p-2.5 font-bold text-saffron-600">${r.id}</td>
+          <td class="p-2.5"><div class="font-bold">${r.name}</div><div class="text-[10px] text-slate-400">${r.phone} • ${r.city}</div></td>
+          <td class="p-2.5">${r.category}</td>
+          <td class="p-2.5"><span class="px-2 py-0.5 rounded-full font-bold text-[10px] ${isResolved ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${r.status}</span></td>
+          <td class="p-2.5 text-right space-x-1">
+            <button onclick="toggleReqStatus('${r.id}')" class="bg-navy-900 text-white text-[10px] px-2 py-1 rounded-lg">${isResolved ? 'Mark Pending' : 'Mark Resolved'}</button>
+            <button onclick="deleteReq('${r.id}')" class="text-red-500 p-1"><i class="fa-solid fa-trash"></i></button>
           </td>
-        </tr>
-      `).join('');
+        `;
+        tbody.appendChild(tr);
+      });
     }
 
-    async function toggleStatus(id, currentStatus) {
-      const nextStatus = currentStatus === 'Pending' ? 'Resolved' : 'Pending';
-      await supabaseClient.from('requests').update({ status: nextStatus }).eq('id', id);
-      fetchRequests();
+    function toggleReqStatus(id) {
+      let reqs = JSON.parse(localStorage.getItem('js_requests')) || [];
+      reqs = reqs.map(r => { if(r.id === id) r.status = (r.status === 'Resolved' ? 'Pending' : 'Resolved'); return r; });
+      localStorage.setItem('js_requests', JSON.stringify(reqs));
+      loadAdminData();
     }
 
-    document.getElementById('campaign-form').addEventListener('submit', async (e) => {
+    function deleteReq(id) {
+      let reqs = JSON.parse(localStorage.getItem('js_requests')) || [];
+      reqs = reqs.filter(r => r.id !== id);
+      localStorage.setItem('js_requests', JSON.stringify(reqs));
+      loadAdminData();
+    }
+
+    function clearAllRequests() {
+      if(confirm("Delete all citizen requests?")) {
+        localStorage.setItem('js_requests', JSON.stringify([]));
+        loadAdminData();
+      }
+    }
+
+    function handleAddCampaign(e) {
       e.preventDefault();
-      await supabaseClient.from('campaigns').insert([{
-        title: document.getElementById('c-title').value,
-        target_amount: parseFloat(document.getElementById('c-target').value),
-        icon: document.getElementById('c-icon').value,
-        description: document.getElementById('c-desc').value,
-        raised_amount: 0
-      }]);
-      alert("Campaign Added!");
-      document.getElementById('campaign-form').reset();
-    });
+      const title = document.getElementById('camp-title').value;
+      const category = document.getElementById('camp-cat').value;
+      const city = document.getElementById('camp-city').value;
+      const goal = Number(document.getElementById('camp-goal').value);
+      const raised = Number(document.getElementById('camp-raised').value);
+      const image = document.getElementById('camp-img').value;
 
-    function subscribeRealtime() {
-      supabaseClient.channel('admin-updates')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'requests' }, () => fetchRequests())
-        .subscribe();
+      const camps = JSON.parse(localStorage.getItem('js_campaigns')) || [];
+      camps.unshift({ id: 'C' + (camps.length + 1), title, category, city, goal, raised, image });
+      localStorage.setItem('js_campaigns', JSON.stringify(camps));
+      alert("Campaign Created!");
+      e.target.reset();
+      loadAdminData();
     }
+
+    window.addEventListener('DOMContentLoaded', loadAdminData);
   </script>
 </body>
 </html>
